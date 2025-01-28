@@ -1,0 +1,65 @@
+package com.example.minecraft.gun;
+
+import net.minecraft.item.Item;
+
+public class GunItem extends Item {
+    public GunItem() {
+        super(new Item.Properties());
+        setRegistryName("gun");
+    }
+}
+package com.example.minecraft;
+
+import com.example.minecraft.gun.GunItem;
+import net.minecraft.item.Item;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
+@Mod("minecraft - gun - mod")
+public class MinecraftGunMod {
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "minecraft - gun - mod");
+    public static final RegistryObject<GunItem> GUN = ITEMS.register("gun", GunItem::new);
+
+    public MinecraftGunMod() {
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ITEMS.register(eventBus);
+    }
+}
+package com.example.minecraft.gun;
+
+import com.example.minecraft.MinecraftGunMod;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(modid = MinecraftGunMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class GunEventHandler {
+    @SubscribeEvent
+    public static void onItemUse(PlayerInteractEvent.RightClickItem event) {
+        PlayerEntity player = event.getPlayer();
+        World world = player.getEntityWorld();
+        Hand hand = event.getHand();
+        ItemStack stack = player.getHeldItem(hand);
+
+        if (stack.getItem() == MinecraftGunMod.GUN.get()) {
+            // 在这里添加射击逻辑，例如生成子弹实体
+            if (!world.isRemote) {
+                // 非客户端逻辑
+            }
+            return ActionResult.resultConsume(stack);
+        }
+    }
+}
+git init
+git add.
+git commit -m "Initial commit for Minecraft gun mod"
+git push -u origin master
